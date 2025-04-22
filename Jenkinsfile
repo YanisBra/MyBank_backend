@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage("Continuous Integration / Intégration Continue") {
             steps {
-                git branch: "main", url: "https://github.com/yanisbra/MyBank_backend"
+                git branch: "main", url: "https://github.com/YanisBra/MyBank_backend"
                 sh "composer install"
             }
         }
