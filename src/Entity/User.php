@@ -10,14 +10,23 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use App\DataPersister\UserDataPersister;
 
 
 #[ApiResource(
     operations: [
-        new Post(processor: UserDataPersister::class)
+        new GetCollection(), // GET /api/users
+        new Post(processor: UserDataPersister::class), // POST /api/users
+        new Get(), // GET /api/users/{id}
+        new Put(security: "is_granted('ROLE_USER')"), // PUT /api/users/{id}
+        new Delete(security: "is_granted('ROLE_ADMIN')") // DELETE /api/users/{id}
     ]
-)]#[ORM\Entity(repositoryClass: UserRepository::class)]
+)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
