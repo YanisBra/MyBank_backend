@@ -19,7 +19,7 @@ use App\DataPersister\UserDataPersister;
 
 #[ApiResource(
     operations: [
-        new GetCollection(), // GET /api/users
+        new GetCollection(security: "is_granted('ROLE_USER')"), // GET /api/users
         new Post(processor: UserDataPersister::class), // POST /api/users
         new Get(), // GET /api/users/{id}
         new Put(security: "is_granted('ROLE_USER')"), // PUT /api/users/{id}
@@ -95,6 +95,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
+        dump('getUserIdentifier called', $this->email); // Ajoute ça
         return (string) $this->email;
     }
 
@@ -207,6 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername(): ?string
     {
+        dump('[getUsername called]', $this->username);
         return $this->username;
     }
 
