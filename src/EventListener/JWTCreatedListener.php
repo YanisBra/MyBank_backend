@@ -12,13 +12,10 @@ class JWTCreatedListener
 
         $payload = $event->getData();
 
-        $payload['id'] = $user->getId();          // utile en backend
-        $payload['email'] = $user->getEmail();    // pour retrouver l'utilisateur
+        $payload['id'] = $user->getId();        
+        $payload['email'] = $user->getEmail();    
         $payload['roles'] = $user->getRoles();
-        $payload['username'] = $user->getUsername(); // Ajoute ça à la place du unset
-            // si tu veux du contrôle d'accès côté frontend
-
-        // unset($payload['username']);              // on nettoie le champ par défaut
+        $payload['username'] = $user->getEmail();
 
         $event->setData($payload);
     }
