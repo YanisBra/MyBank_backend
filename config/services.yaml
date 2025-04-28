@@ -30,6 +30,23 @@ services:
         tags: 
             - { name: 'api_platform.state_processor', args: [App\Entity\User] }
 
+    App\DataPersister\CategoryDataPersister:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $security: '@security.helper'
+        tags:
+            - { name: 'api_platform.state_processor', args: [App\Entity\Category] }
+
+    App\DataPersister\OperationDataPersister:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $security: '@security.helper'
+        tags:
+            - { name: 'api_platform.state_processor', args: [App\Entity\Operation] }
+
     App\EventListener\JWTCreatedListener:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+
+    

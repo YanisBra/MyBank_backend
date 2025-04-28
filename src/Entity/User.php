@@ -9,17 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\{Post, Get, Put, Delete, GetCollection};
 use App\DataPersister\UserDataPersister;
 
 
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_USER')"), // GET /api/users
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"), // GET /api/users
         new Post(processor: UserDataPersister::class), // POST /api/users
         new Get(), // GET /api/users/{id}
         new Put(security: "is_granted('ROLE_USER')"), // PUT /api/users/{id}
@@ -95,7 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        dump('getUserIdentifier called', $this->email); // Ajoute ça
         return (string) $this->email;
     }
 
@@ -208,7 +203,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername(): ?string
     {
-        dump('[getUsername called]', $this->username);
         return $this->username;
     }
 

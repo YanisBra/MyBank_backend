@@ -3,11 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\OperationRepository;
+use App\DataPersister\OperationDataPersister;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\{Post, Get, Put, Delete, Patch, GetCollection};
 
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(processor: OperationDataPersister::class),
+        new Put(),
+        new Delete(),
+        new Patch(),
+    ]
+)]
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 class Operation
 {
@@ -22,7 +33,7 @@ class Operation
     #[ORM\Column]
     private ?float $amount = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
@@ -59,6 +70,11 @@ class Operation
         $this->amount = $amount;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->datetime = new \DateTime();
     }
 
     public function getDatetime(): ?\DateTimeInterface
