@@ -22,8 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(processor: UserDataPersister::class),
         new Get(security: "object == user or is_granted('ROLE_ADMIN')"),
-        new Put(security: "object == user"),
-        new Delete(security: "is_granted('ROLE_ADMIN')")
+        new Put(security: "object == user or is_granted('ROLE_ADMIN')"),
+        new Delete(security: "object == user or is_granted('ROLE_ADMIN')")
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
