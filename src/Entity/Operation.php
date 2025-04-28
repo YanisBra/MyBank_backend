@@ -11,12 +11,12 @@ use ApiPlatform\Metadata\{Post, Get, Put, Delete, Patch, GetCollection};
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
-        new Post(processor: OperationDataPersister::class),
-        new Put(),
-        new Delete(),
-        new Patch(),
+        new Get(security: "object.getUser() == user"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(processor: OperationDataPersister::class, security: "is_granted('ROLE_USER')"),
+        new Put(security: "object.getUser() == user"),
+        new Delete(security: "object.getUser() == user"),
+        new Patch(security: "object.getUser() == user"),
     ]
 )]
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
@@ -28,12 +28,17 @@ class Operation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "The label is required.")]
+    #[Assert\Length(max: 255, maxMessage: "The label cannot exceed {{ limit }} characters.")]
     private ?string $label = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: "The amount is required.")]
+    #[Assert\Positive(message: "The amount must be positive.")]
     private ?float $amount = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotNull(message: "The date is required.")]
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]

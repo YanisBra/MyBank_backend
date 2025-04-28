@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,15 +12,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\{Post, Get, Put, Delete, GetCollection};
 use App\DataPersister\UserDataPersister;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 #[ApiResource(
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
     operations: [
-        new GetCollection(security: "is_granted('ROLE_ADMIN')"), // GET /api/users
-        new Post(processor: UserDataPersister::class), // POST /api/users
-        new Get(), // GET /api/users/{id}
-        new Put(security: "is_granted('ROLE_USER')"), // PUT /api/users/{id}
-        new Delete(security: "is_granted('ROLE_ADMIN')") // DELETE /api/users/{id}
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Post(processor: UserDataPersister::class),
+        new Get(security: "object == user or is_granted('ROLE_ADMIN')"),
+        new Put(security: "object == user"),
+        new Delete(security: "is_granted('ROLE_ADMIN')")
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -32,18 +36,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "Email is required.")]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['user:read'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Password is required.")]
+    #[Assert\Length(
+        min: 6,
+        minMessage: "Password must be at least {{ limit }} characters long."
+    )]
+    #[Groups(['user:write'])]
     private ?string $password = null;
 
     /**
@@ -59,6 +73,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $categories;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Username is required.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Username must be at least {{ limit }} characters long.",
+        maxMessage: "Username cannot be longer than {{ limit }} characters."
+    )]
+    #[Groups(['user:read', 'user:write'])]
     private ?string $username = null;
 
     public function __construct()
@@ -101,7 +123,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
