@@ -39,7 +39,6 @@ class Category
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: "A user must be associated with the category.")]
     private ?User $user = null;
 
     public function getId(): ?int
