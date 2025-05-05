@@ -11,6 +11,7 @@ Create the database and run the migrations:
 ```
 symfony console doctrine:database:create
 symfony console doctrine:migration:migrate
+php bin/console doctrine:fixtures:load
 ```
 
 Run the project locally:
@@ -26,7 +27,7 @@ symfony serve
 Launch all containers with a single command:
 
 ```
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
 This will:

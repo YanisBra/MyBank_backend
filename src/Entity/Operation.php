@@ -46,6 +46,7 @@ class Operation
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
+    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?Category $category = null;
 
     public function getId(): ?int

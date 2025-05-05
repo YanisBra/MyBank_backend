@@ -20,7 +20,7 @@
 services:
     database:
         image: 'mysql'
-        container_name: mybank-mysql_container
+        container_name: mybank_mysql_container
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: mybank_db
