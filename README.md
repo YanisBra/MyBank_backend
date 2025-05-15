@@ -9,9 +9,10 @@ composer install
 Create the database and run the migrations:
 
 ```
-symfony console doctrine:database:create
-symfony console doctrine:migration:migrate
+php bin/console doctrine:database:create
+php bin/console doctrine:migration:migrate
 php bin/console doctrine:fixtures:load
+php bin/console lexik:jwt:generate-keypair
 ```
 
 Run the project locally:

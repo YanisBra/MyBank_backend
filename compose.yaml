@@ -13,6 +13,7 @@ services:
             - symfony-mybank-network
     backend:
         image: 'yanisbra/mybank_backend'
+        # build: .
         container_name: mybank_backend_container
         ports:
             - '8082:80'
@@ -30,59 +31,3 @@ networks:
     symfony-mybank-network:
         driver: bridge
 
-
-
-
-
-# #test
-# pipeline {
-#     agent {
-#         label "${AGENT}"
-#     }
-
-#     stages {
-#         stage('Clone repository') {
-#             steps {
-#                 git branch: 'main', url: 'https://github.com/YanisBra/MyBank_backend.git'
-#                 sh 'composer install --no-scripts'
-#                 sh 'php bin/console assets:install public'
-#                 sh 'php bin/console importmap:install'
-#             }
-#         }
-        
-#         stage('Continuous Delivery') {
-#             steps {
-#                 sh "docker build . -t ${DOCKERHUB_USERNAME}/mybank_backend"
-#                 sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKER_PASSWORD}" 
-#                 sh "docker push ${DOCKERHUB_USERNAME}/mybank_backend"
-#             }
-#         }
-
-
-#         stage('Continuous Deployment') {
-#             steps {
-#                 sh '''
-#                     sshpass -p yanis ssh -o StrictHostKeyChecking=no yanis@192.168.64.2
-                        # curl -O https://raw.githubusercontent.com/YanisBra/MyBank_backend/refs/heads/main/compose.yaml
-                        # docker compose down || true
-                        # docker compose up -d
-                        # sleep 10l
-                        # docker exec mybank_backend_container php bin/console doctrine:migrations:migrate --no-interaction
-                        # docker exec mybank_backend_container php bin/console doctrine:fixtures:load --no-interaction
-                        # docker exec mybank_backend_container php bin/console lexik:jwt:generate-keypair
-                        # docker exec mybank_backend_container php bin/console cache:clear
-#                 '''
-#             }
-#         }
-
-#     }
-
-#     post {
-#         success {
-#             echo '✅ Déploiement terminé avec succès.'
-#         }
-#         failure {
-#             echo '❌ Une erreur est survenue pendant le déploiement.'
-#         }
-#     }
-# }
