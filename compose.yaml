@@ -31,7 +31,7 @@ services:
         networks:
             - symfony-mybank-network
     backend:
-        build: yanisbra/mybank_frontend
+        build: yanisbra/mybank_backend
         container_name: mybank_backend_container
         ports:
             - '8082:80'
