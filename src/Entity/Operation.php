@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\OperationRepository;
 use App\DataPersister\OperationDataPersister;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\{Post, Get, Put, Delete, Patch, GetCollection};
@@ -14,9 +15,9 @@ use ApiPlatform\Metadata\{Post, Get, Put, Delete, Patch, GetCollection};
         new Get(security: "object.getUser() == user"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(processor: OperationDataPersister::class, security: "is_granted('ROLE_USER')"),
-        new Put(security: "object.getUser() == user"),
+        new Put(processor: OperationDataPersister::class, security: "object.getUser() == user"),
         new Delete(security: "object.getUser() == user"),
-        new Patch(security: "object.getUser() == user"),
+        new Patch(processor: OperationDataPersister::class, security: "object.getUser() == user"),
     ]
 )]
 #[ORM\Entity(repositoryClass: OperationRepository::class)]

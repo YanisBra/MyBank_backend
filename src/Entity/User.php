@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\{Post, Get, Put, Delete, GetCollection};
+use ApiPlatform\Metadata\{Post, Get, Put, Patch, Delete, GetCollection};
 use App\DataPersister\UserDataPersister;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -22,7 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(processor: UserDataPersister::class),
         new Get(security: "object == user or is_granted('ROLE_ADMIN')"),
-        new Put(security: "object == user or is_granted('ROLE_ADMIN')"),
+        new Put(processor: UserDataPersister::class, security: "object == user or is_granted('ROLE_ADMIN')"),
+        new Patch(processor: UserDataPersister::class, security: "object == user or is_granted('ROLE_ADMIN')"),
         new Delete(security: "object == user or is_granted('ROLE_ADMIN')")
     ]
 )]

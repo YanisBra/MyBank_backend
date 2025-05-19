@@ -11,13 +11,14 @@ use ApiPlatform\Metadata\{Post, Get, Put, Delete, Patch, GetCollection};
 
 
 
+
 #[ApiResource(
     operations: [
         new Get(security: "object.getUser() == user"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(processor: CategoryDataPersister::class, security: "is_granted('ROLE_USER')"),
-        new Put(security: "object.getUser() == user"),
-        new Patch(security: "object.getUser() == user"),
+        new Put(processor: CategoryDataPersister::class,security: "object.getUser() == user"),
+        new Patch(processor: CategoryDataPersister::class,security: "object.getUser() == user"),
         new Delete(security: "object.getUser() == user"),
     ]
 )]
