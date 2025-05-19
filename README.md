@@ -3,7 +3,19 @@
 Install the dependencies:
 
 ```
-composer install
+composer install --no-scripts
+php bin/console assets:install public
+php bin/console importmap:install
+```
+
+Lancer les tests
+
+```
+php bin/console doctrine:database:create --env=test
+php bin/console doctrine:migrations:migrate --env=test
+php bin/console doctrine:fixtures:load --env=test
+php bin/console lexik:jwt:generate-keypair --env=test
+php bin/phpunit
 ```
 
 Create the database and run the migrations:
