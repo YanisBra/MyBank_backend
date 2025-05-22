@@ -8,16 +8,6 @@ php bin/console assets:install public
 php bin/console importmap:install
 ```
 
-Lancer les tests
-
-```
-php bin/console doctrine:database:create --env=test
-php bin/console doctrine:migrations:migrate --env=test
-php bin/console doctrine:fixtures:load --env=test
-php bin/console lexik:jwt:generate-keypair --env=test
-php bin/phpunit
-```
-
 Create the database and run the migrations:
 
 ```
@@ -25,6 +15,16 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migration:migrate
 php bin/console doctrine:fixtures:load
 php bin/console lexik:jwt:generate-keypair
+```
+
+Run tests
+
+```
+php bin/console doctrine:database:create --env=test
+php bin/console doctrine:migrations:migrate --env=test
+php bin/console doctrine:fixtures:load --env=test
+php bin/console lexik:jwt:generate-keypair --env=test
+php bin/phpunit
 ```
 
 Run the project locally:

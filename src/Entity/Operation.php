@@ -35,7 +35,6 @@ class Operation
 
     #[ORM\Column]
     #[Assert\NotNull(message: "The amount is required.")]
-    #[Assert\Positive(message: "The amount must be positive.")]
     private ?float $amount = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
