@@ -4,7 +4,7 @@ services:
         container_name: mybank_mysql_container
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: mybank_db
+            MYSQL_DATABASE: mybank_db_test
         ports:
             - '3306'
         volumes:
