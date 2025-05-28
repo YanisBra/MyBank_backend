@@ -1,0 +1,32 @@
+services:
+    database:
+        image: 'mysql'
+        container_name: mybank_mysql_container
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: mybank_db_test
+        ports:
+            - '3306'
+        volumes:
+            - 'mysql_data:/var/lib/mysql'
+        networks:
+            - symfony-mybank-network
+    backend:    
+        build: .
+        container_name: mybank_backend_container
+        ports:
+            - '8082:80'
+        networks:
+            - symfony-mybank-network
+        depends_on:
+            - database
+        # If migrations must be run automatically, consider using entrypoint or command here
+        # command: ["sh", "-c", "php bin/console doctrine:database:create && php bin/console doctrine:migration:migrate && apache2-foreground"]
+
+volumes:
+    mysql_data:
+
+networks:
+    symfony-mybank-network:
+        driver: bridge
+
