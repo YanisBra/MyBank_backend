@@ -40,7 +40,6 @@ pipeline {
                     docker compose -f compose.prod.yaml up -d &&\
                     sleep 10 &&\
                     docker exec mybank_backend_container php bin/console doctrine:migrations:migrate --no-interaction &&\
-                    docker exec mybank_backend_container php bin/console doctrine:fixtures:load --no-interaction &&\
                     docker exec mybank_backend_container php bin/console lexik:jwt:generate-keypair &&\
                     docker exec mybank_backend_container php bin/console cache:clear"
                 '''
